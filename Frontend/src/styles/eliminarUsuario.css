@@ -1,0 +1,9 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+
+.contenedor-principal {
+  display: flex;
+  font-family: 'Poppins', sans-serif;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(to bottom, #FAF0E6, #A7C7E7);
+}

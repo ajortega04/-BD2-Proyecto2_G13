@@ -1,0 +1,41 @@
+/* Estilos para el contenedor de registro */
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('../assets/biblio.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+/* Estilos para el contenedor del formulario */
+.register-form-wrapper {
+    width: 100%; /* Ancho del formulario */
+    max-width: 400px; /* Ancho máximo del formulario */
+    background: #312626; /* Color de fondo del formulario */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 0 auto; /* Centrar el formulario horizontalmente */
+}
+
+/* Estilos para el botón de "Regresar" */
+.back-to-login {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.boton-submit, .boton-back {
+    font-family: "Kalam", cursive;
+    font-weight: 400;
+    font-style: normal;
+    color: rgb(236, 221, 221);
+}
+
+.text-center-custom {
+    font-family: "Kalam", cursive;
+    font-weight: 400;
+    font-style: normal;
+    color: rgb(236, 221, 221);
+}

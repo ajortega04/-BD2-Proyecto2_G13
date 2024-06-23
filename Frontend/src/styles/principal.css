@@ -1,0 +1,51 @@
+/* principal.css */
+.inicio-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-image: url('../assets/portada3.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.content {
+    margin-left: 20px; /* Ajusta el margen izquierdo según tu preferencia */
+    text-align: center;
+    animation: cascade 1s ease forwards;
+}
+
+.text-center {
+    font-family: "Kalam", cursive;
+    font-weight: 400;
+    font-style: normal;
+    animation: cascade 1s ease forwards;
+    font-size: 4rem;
+    color: rgb(248, 249, 238);
+}
+
+p {
+    font-family: "Kalam", cursive;
+    font-weight: 400;
+    font-style: normal;
+    animation: cascade 1s ease forwards;
+    font-size: 1.5rem;
+    color: rgb(255, 255, 255);
+}
+
+@keyframes cascade {
+    0% {
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+}
+
+.button-access {
+    font-family: "Kalam", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
