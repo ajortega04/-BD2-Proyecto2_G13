@@ -1,0 +1,111 @@
+import Layout from "../components/Layout.jsx";
+import InputSearch from "../components/InputSearch.jsx";
+import BookCard from "../components/BookCard.jsx";
+import {useState} from "react";
+import ModalContainer from "../components/ModalContainer.jsx";
+function Books() {
+    const [newBookModSt, setNewBookModSt] = useState(false);
+    const defaultImage = "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+    const [selectedImage, setSelectedImage] = useState(defaultImage);
+
+    const handleImageClick = () => {
+        document.getElementById("inputImage").click();
+    }
+
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setSelectedImage(e.target.result);
+            }
+
+            reader.readAsDataURL(file);
+        } else {
+            setSelectedImage(defaultImage);
+        }
+    }
+
+    return(
+        <Layout
+            title={"Libros"}
+        >
+            <InputSearch/>
+            <div className={"flex justify-end mt-5"}>
+                <button onClick={ () => setNewBookModSt(true) } className={"bg-indigo-500 hover:bg-indigo-400 text-white font-medium rounded-md px-7 py-0.5 shadow-md"}>
+                    Agregar libro
+                </button>
+            </div>
+            <div className={"grid grid-cols-3 2xl:grid-cols-4 mt-5 gap-x-3 gap-y-2"}>
+                <BookCard/>
+                <BookCard/>
+                <BookCard/>
+                <BookCard/>
+
+                <BookCard/>
+                <BookCard/>
+                <BookCard/>
+                <BookCard/>
+            </div>
+
+            <ModalContainer
+                state={ newBookModSt }
+                changeState={ setNewBookModSt }
+                title={ "Registrar libro" }
+            >
+                <form className="flex flex-row">
+                    <div className="flex flex-col items-center justify-center mr-7">
+                        <div onClick={handleImageClick} className="w-28 h-28 md:w-32 md:h-32 lg:w-36 lg:h-36 xl:w-40 xl:h-40 bg-slate-800 rounded-lg mb-4">
+                            <img id="profileImage" src={ selectedImage } alt="Perfil" className="object-cover w-full rounded-lg h-full" />
+                        </div>
+                        <input onChange={handleImageChange} id="inputImage" name="picture" type="file" accept=".jpg, .png, .jpeg" className="hidden"/>
+                        {
+                            selectedImage != defaultImage ? (<p className="text-sm font-bold">Foto de perfil</p>) :
+                                (<p className="text-sm font-bold text-red-800">Selecciona una imagen</p>)
+                        }
+                    </div>
+                    <div className="text-left grid grid-cols-2 gap-x-3 gap-y-2">
+                        <div>
+                            <label htmlFor="artist" className="text-sm font-bold pb-7">Autor</label>
+                            <select className="w-full p-2 text-sm border border-zinc-700 rounded-md" required>
+                                <option value={""}>Seleccione una opción</option>
+                                <option value={""}>R.K. Rowling</option>
+                                <option value={""}>Gabriel Garcia Márquez</option>
+                                <option value={""}>El rubiu</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label htmlFor="artist" className="text-sm font-bold pb-7">Género</label>
+                            <select className="w-full p-2 text-sm border border-zinc-700 rounded-md" required>
+                                <option value={""}>Seleccione una opción</option>
+                                <option value={""}>Thriller</option>
+                                <option value={""}>Drama</option>
+                            </select>
+                        </div>
+                        <div className="col-span-2">
+                            <label className="text-sm font-bold pb-7">Título</label>
+                            <input type="text" className="w-full p-2 text-sm border border-zinc-700 rounded-md" placeholder="Ingresa el titulo para el libro" required/>
+                        </div>
+                        <div>
+                            <label className="text-sm font-bold pb-7">Precio</label>
+                            <input type="number" className="w-full p-2 text-sm border border-zinc-700 rounded-md" placeholder="Ingresa el precio" required/>
+                        </div>
+                        <div>
+                            <label className="text-sm font-bold pb-7">Stock</label>
+                            <input type="number" className="w-full p-2 text-sm border border-zinc-700 rounded-md" placeholder="Ingresa el precio" required/>
+                        </div>
+                        <div className="col-span-2">
+                            <label className="text-sm font-bold pb-7">Descripción</label>
+                            <textarea className="w-full p-2 text-sm border border-zinc-700 rounded-md" placeholder="Ingresa una descripción"></textarea>
+                        </div>
+                        <div className="pt-4 text-sm col-span-2">
+                            <button type="submit" className="w-full bg-indigo-500 rounded-3xl text-white py-2 font-bold">Crear</button>
+                        </div>
+                    </div>
+                </form>
+            </ModalContainer>
+        </Layout>
+    )
+}
+
+export default Books;
