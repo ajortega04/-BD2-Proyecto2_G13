@@ -1,22 +1,16 @@
-const app = require('./app');
-const dotenv = require('dotenv');
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+const express = require("express");
+const cors = require("cors");
+const authorsRoutes = require("./routes/authors");
+
+const app = express();
 
 app.use(cors());
 app.use(express.json());
-dotenv.config();
 
-const PORT = process.env.PORT || 3000;
+app.use("/", authorsRoutes);
 
-// Conectar a MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-    dbName: 'store' // Nombre de la base de datos a la que te quieres conectar
-  });
+const PORT = 3000;
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'Error de conexión a MongoDB:'));
-db.once('open', () => {
-  console.log('Conexión exitosa a MongoDB');
+app.listen(PORT, () => {
+    console.log(`server listening on port ${ PORT }`);
 });
