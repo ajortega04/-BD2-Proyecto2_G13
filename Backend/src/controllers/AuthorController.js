@@ -20,6 +20,17 @@ class Author {
             throw new Error(error.message || 'Error al crear el autor', error.statusCode || 500);
         }
     }
+
+    static async getAll(){
+        try {
+            const authors = await AuthorModel.find();
+            return authors.map(author => new Author(author.name, author.biography, author.picture))
+        } catch (error){
+            console.error('Error al obtener autores:', error);
+            throw new Error(error.message || 'Error al obtener autores', error.statusCode || 500);
+        }
+    }
 }
 
 module.exports = Author
+

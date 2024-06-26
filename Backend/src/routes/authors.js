@@ -12,7 +12,16 @@ router.post('/create', upload.single('picture'), async (req, res) => {
         const newAuthor = await Author.create(name, biography, result);
         res.status(201).json(newAuthor);
     } catch (err) {
-        res.status(500).json("Error al registrar autor");
+        next(err);
+    }
+});
+
+router.get('/get-all', async (req, res, next) => {
+    try {
+        const authors = await Author.getAll();
+        res.json(authors);
+    } catch (err) {
+        next(err);
     }
 });
 

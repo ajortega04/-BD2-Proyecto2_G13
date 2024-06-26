@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import Layout from "../components/Layout.jsx";
 import InputSearch from "../components/InputSearch.jsx";
 import AuthorCard from "../components/AuthorCard.jsx";
@@ -8,10 +8,32 @@ function Authors() {
     const [newAuthormodSt, setNewAuthorModSt] = useState(false);
     const defaultImage = "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
     const [selectedImage, setSelectedImage] = useState(defaultImage);
+    const [authors, setAuthors] = useState([]);
     const [authorData, setAuthorData] = useState({
         name: '',
         biography: ''
     });
+
+    useEffect(() => {
+        // Función para obtener los autores
+        const fetchAuthors = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/authors/get-all');
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setAuthors(data);
+            } catch (error) {
+                console.error('Error fetching authors:', error);
+            }
+        };
+
+        // Llamar a la función para obtener los autores
+        fetchAuthors();
+    }, []);
+
 
     const handleImageClick = () => {
         document.getElementById("inputImage").click();
@@ -82,14 +104,12 @@ function Authors() {
                 </button>
             </div>
             <div className={"grid grid-cols-3 2xl:grid-cols-4 mt-5 gap-x-3 gap-y-2"}>
-                <AuthorCard/>
-                <AuthorCard/>
-                <AuthorCard/>
-                <AuthorCard/>
-                <AuthorCard/>
-                <AuthorCard/>
-                <AuthorCard/>
-                <AuthorCard/>
+                {authors.map(authors => (
+                    <AuthorCard
+                        name={authors.name}
+                        picture={authors.picture}
+                    />
+                ))}
             </div>
 
             <ModalContainer
