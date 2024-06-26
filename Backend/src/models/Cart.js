@@ -7,6 +7,7 @@ const cartSchema = new mongoose.Schema({
     quantity: { type: Number, required: true },
     precio: { type: Number, required: true }
   }],
+  status: { type: String, enum: ['en proceso', 'enviado', 'entregado'], default: 'en proceso' },
   createdAt: { type: Date, default: Date.now }
 });
 

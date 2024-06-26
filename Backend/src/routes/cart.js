@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const CartController = require('../controllers/CartController');
 
+// Ruta para obtener todos los carritos
+router.get('/', CartController.getAllCarts);
+
 // Ruta para crear un carrito
 router.post('/create', CartController.createCart);
 
@@ -16,6 +19,9 @@ router.post('/remove', CartController.removeItemFromCart);
 
 // Ruta para actualizar la cantidad de un item en el carrito
 router.post('/update', CartController.updateItemQuantity);
+
+// Ruta para actualizar el status de compra de un usuario
+router.put('/status', CartController.updateCartStatus);
 
 // Ruta para eliminar el carrito de un usuario por su ID de usuario
 router.delete('/:userId', CartController.deleteCart);
