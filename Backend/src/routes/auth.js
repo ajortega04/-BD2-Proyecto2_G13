@@ -24,12 +24,12 @@ router.post('/login', async (req, res, next) => {
 
 router.get('/:userId', async (req, res, next) => {
     try {
-        const userId = req.params.userId;
-        const user = await UserController.getUserById(userId);
-        res.json(user);
+      const userId = req.params.userId;
+      const user = await User.getUserById(userId);
+      res.json(user);
     } catch (error) {
-        next(error);
+      next(error);
     }
-});
+  });
 
 module.exports = router;

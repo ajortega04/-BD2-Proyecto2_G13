@@ -3,6 +3,7 @@ const cors = require("cors");
 const authorsRoutes = require("./routes/authors");
 const authRoutes = require("./routes/auth");
 const booksRoutes = require("./routes/books");
+const cartRoutes = require("./routes/cart");
 const mongoose = require("mongoose");
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use("/users", authRoutes);
 app.use("/authors", authorsRoutes);
 app.use("/books", booksRoutes);
+app.use("/cart", cartRoutes);
 
 const PORT = 3000;
 
