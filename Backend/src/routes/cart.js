@@ -1,22 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
-const upload = multer();
 const CartController = require('../controllers/CartController');
 
-// Ruta para crear un libro
-router.post('/create', upload.none(), CartController.createCart);
+// Ruta para crear un carrito
+router.post('/create', CartController.createCart);
 
-// Ruta para obtener todos los libros
-router.get('/', CartController.getAllCarts);
+// Ruta para obtener el carrito de un usuario por su ID de usuario
+router.get('/:userId', CartController.getCartByUserId);
 
-// Ruta para obtener un libro por ID
-router.get('/:id', CartController.getCartById);
+// Ruta para agregar un item al carrito
+router.post('/add', CartController.addItemToCart);
 
-// Ruta para actualizar un libro por ID
-router.put('/:id', upload.none(), CartController.updateCart);
+// Ruta para quitar un item del carrito
+router.post('/remove', CartController.removeItemFromCart);
 
-// Ruta para eliminar un libro por ID
-router.delete('/:id', CartController.deleteCart);
+// Ruta para actualizar la cantidad de un item en el carrito
+router.post('/update', CartController.updateItemQuantity);
+
+// Ruta para eliminar el carrito de un usuario por su ID de usuario
+router.delete('/:userId', CartController.deleteCart);
 
 module.exports = router;
