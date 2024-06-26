@@ -28,7 +28,7 @@ class User {
             };
         } catch (error) {
             console.error('Error al crear el usuario:', error);
-            throw new HttpError(error.message || 'Error al crear el usuario', error.statusCode || 500);
+            throw new Error(error.message || 'Error al crear el usuario', error.statusCode || 500);
         }
     }
 
