@@ -19,7 +19,7 @@ async function uploadFile(file) {
     const extension = file.originalname.split('.').pop().toLowerCase();
     let folderName = '';
     if (extension === 'jpg' || extension === 'png' || extension === 'jpeg') {
-        folderName = 'Fotos';
+        folderName = 'Pictures';
     } else {
         throw new Error("Extensión del archivo no compatible");
     }

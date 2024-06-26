@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/users", authRoutes);
-app.use("/", authorsRoutes);
+app.use("/authors", authorsRoutes);
 
 const PORT = 3000;
 

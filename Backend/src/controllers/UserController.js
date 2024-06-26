@@ -32,7 +32,6 @@ class User {
         }
     }
 
-
     static async verifyCredentials(email, password) {
         try {
             const user = await UserModel.findOne({ email });
@@ -55,6 +54,23 @@ class User {
         }
     }
 
+    static async getUserById(userId) {
+        try {
+            const user = await UserModel.findById(userId);
+
+            if (!user) {
+                throw new Error('Usuario no encontrado');
+            }
+
+            const userWithoutPassword = user.toObject();
+            delete userWithoutPassword.password;
+
+            return userWithoutPassword;
+        } catch (error) {
+            console.error('Error al obtener el usuario:', error);
+            throw new Error(error.message || 'Error al obtener el usuario', error.statusCode || 404);
+        }
+    }
 
 
 }

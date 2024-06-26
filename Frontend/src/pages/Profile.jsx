@@ -16,7 +16,6 @@ function Profile() {
             reader.onload = (e) => {
                 setSelectedImage(e.target.result);
             }
-
             reader.readAsDataURL(file);
         } else {
             setSelectedImage(defaultImage);
