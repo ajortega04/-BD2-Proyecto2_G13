@@ -48,7 +48,8 @@ function SignUp() {
             }
 
             const result = await response.json();
-            console.log('Usuario creado:', result);
+            localStorage.setItem('userId', result._id);
+            localStorage.setItem('userType', result.type.toString());
             navigate("/home");
         } catch (error) {
             console.error('Error al crear el usuario:', error);
