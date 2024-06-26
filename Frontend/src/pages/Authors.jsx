@@ -15,7 +15,6 @@ function Authors() {
     });
 
     useEffect(() => {
-        // Función para obtener los autores
         const fetchAuthors = async () => {
             try {
                 const response = await fetch('http://localhost:3000/authors/get-all');
@@ -31,7 +30,6 @@ function Authors() {
             }
         };
 
-        // Llamar a la función para obtener los autores
         fetchAuthors();
     }, []);
 
