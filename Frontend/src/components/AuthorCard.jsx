@@ -1,5 +1,13 @@
 import { FaRegTrashCan } from "react-icons/fa6";
-function AuthorCard({name, picture}) {
+function AuthorCard({id, name, picture, updateAuthors}) {
+
+    const handleDeleteAuthor = async () => {
+        const response = await fetch(`http://localhost:3000/authors/delete-by-id/${id}`, {
+            method: 'DELETE'
+        });
+        updateAuthors();
+    }
+
     return(
         <div className={"flex flex-row p-2 rounded-md bg-slate-50 shadow-md"}>
             <div className={"w-full"}>
@@ -11,7 +19,7 @@ function AuthorCard({name, picture}) {
             </div>
             <div className={"flex flex-col p-2 w-full"}>
                 <div className={"flex justify-end hover:text-red-500"}>
-                    <button>
+                    <button onClick={handleDeleteAuthor}>
                         <FaRegTrashCan/>
                     </button>
                 </div>

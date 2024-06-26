@@ -17,7 +17,7 @@ class Author {
             }
         } catch (error) {
             console.error('Error al crear el autor:', error);
-            throw new Error(error.message || 'Error al crear el autor', error.statusCode || 500);
+            throw new Error('Error al crear el autor');
         }
     }
 
@@ -26,7 +26,15 @@ class Author {
             return await AuthorModel.find();
         } catch (error){
             console.error('Error al obtener autores:', error);
-            throw new Error(error.message || 'Error al obtener autores', error.statusCode || 500);
+            throw new Error('Error al obtener autores');
+        }
+    }
+
+    static async deleteById(id) {
+        try {
+            await AuthorModel.findByIdAndDelete(id);
+        } catch (err) {
+            throw new Error('Error al eliminar el usuario');
         }
     }
 }

@@ -25,4 +25,13 @@ router.get('/get-all', async (req, res, next) => {
     }
 });
 
+router.delete('/delete-by-id/:id', async (req, res, next) => {
+    try {
+        await Author.deleteById(req.params.id);
+        res.status(204).end();
+    } catch (err) {
+        next(err);
+    }
+});
+
 module.exports = router;

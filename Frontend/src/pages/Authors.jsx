@@ -14,22 +14,21 @@ function Authors() {
         biography: ''
     });
 
-    useEffect(() => {
-        const fetchAuthors = async () => {
-            try {
-                const response = await fetch('http://localhost:3000/authors/get-all');
+    const fetchAuthors = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/authors/get-all');
 
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                console.log(data)
-                setAuthors(data);
-            } catch (error) {
-                console.error('Error fetching authors:', error);
+            if (!response.ok) {
+                console.error('Network response was not ok');
             }
-        };
+            const data = await response.json();
+            setAuthors(data);
+        } catch (error) {
+            console.error('Error fetching authors:', error);
+        }
+    };
 
+    useEffect(() => {
         fetchAuthors();
     }, []);
 
@@ -87,7 +86,7 @@ function Authors() {
             setAuthorData({ name: '', biography: '' });
             setSelectedImage(defaultImage);
             setNewAuthorModSt(false);
-
+            fetchAuthors();
         } catch (error) {
             console.error('Error:', error);
             alert('No se pudo crear el autor');
@@ -106,8 +105,10 @@ function Authors() {
                 {authors.map(authors => (
                     <div key={authors._id}>
                         <AuthorCard
+                            id={authors._id}
                             name={authors.name}
                             picture={authors.picture}
+                            updateAuthors={fetchAuthors}
                         />
                     </div>
                 ))}

@@ -50,7 +50,7 @@ class User {
             };
         } catch (error) {
             console.error('Error al verificar las credenciales:', error);
-            throw new Error(error.message || 'Error al verificar las credenciales', error.statusCode || 401);
+            throw new Error('Error al verificar las credenciales');
         }
     }
 
@@ -68,7 +68,7 @@ class User {
             return userWithoutPassword;
         } catch (error) {
             console.error('Error al obtener el usuario:', error);
-            throw new Error(error.message || 'Error al obtener el usuario', error.statusCode || 404);
+            throw new Error('Error al obtener el usuario');
         }
     }
 
