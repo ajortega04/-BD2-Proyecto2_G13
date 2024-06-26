@@ -1,0 +1,38 @@
+const mongoose = require('mongoose');
+const UserModel = require("../models/User");
+
+class User {
+    constructor(type, name, lastName, birthdate, email, password) {
+        this.type = type;
+        this.name = name;
+        this.lastName = lastName;
+        this.birthdate = birthdate;
+        this.email = email;
+        this.password = password;
+    }
+
+    static async create(type, name, lastName, birthdate, email, password) {
+        try {
+            // Verificar si ya existe un usuario con el mismo correo electrónico
+            const existingUser = await UserModel.findOne({ email });
+            if (existingUser) {
+                throw new Error('El correo electrónico ya existe');
+            }
+
+            // Crear nuevo usuario
+            const newUser = new UserModel({ type, name, lastName, birthdate, email, password });
+            const savedUser = await newUser.save();
+            return {
+                _id: savedUser._id,
+                type: savedUser.type
+            };
+        } catch (error) {
+            console.error('Error al crear el usuario:', error);
+            throw new HttpError(error.message || 'Error al crear el usuario', error.statusCode || 500);
+        }
+    }
+
+
+}
+
+module.exports = User;
