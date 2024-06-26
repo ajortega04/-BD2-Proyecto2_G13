@@ -24,6 +24,7 @@ function Authors() {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
+                console.log(data)
                 setAuthors(data);
             } catch (error) {
                 console.error('Error fetching authors:', error);
@@ -105,10 +106,12 @@ function Authors() {
             </div>
             <div className={"grid grid-cols-3 2xl:grid-cols-4 mt-5 gap-x-3 gap-y-2"}>
                 {authors.map(authors => (
-                    <AuthorCard
-                        name={authors.name}
-                        picture={authors.picture}
-                    />
+                    <div key={authors._id}>
+                        <AuthorCard
+                            name={authors.name}
+                            picture={authors.picture}
+                        />
+                    </div>
                 ))}
             </div>
 
