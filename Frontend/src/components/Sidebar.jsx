@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiFillHome } from "react-icons/ai";
 import { CiLogout } from "react-icons/ci";
 import { GrHistory } from "react-icons/gr";
@@ -6,6 +6,13 @@ import { FaUserGroup, FaBook, FaRegCircleUser, FaCartShopping } from "react-icon
 import { TbReportAnalytics } from "react-icons/tb";
 
 function Sidebar () {
+    const navigate = useNavigate();
+    const handleCloseSession = () => {
+        localStorage.removeItem('userId');
+        localStorage.removeItem('userType');
+        navigate('/');
+    }
+
     return (
         <div className="fixed h-screen text-white">
             <div className="hidden md:flex flex-col gap-y-2 bg-black h-full w-[300px] p-2">
@@ -67,14 +74,14 @@ function Sidebar () {
                         </div>
                     </Link>
 
-                    <Link to={"/"}>
+                    <button onClick={handleCloseSession} className={"w-full"}>
                         <div className="flex items-center mt-1 hover:bg-zinc-700 pl-2 py-2">
                             <div className="bg-gradient-to-r from-indigo-500 to-blue-500 rounded-md p-2">
                                 <CiLogout className="font-bold text-xl"/>
                             </div>
                             <p className="ml-5">Cerrar sesión</p>
                         </div>
-                    </Link>
+                    </button>
                 </div>
             </div>
         </div>
