@@ -33,6 +33,30 @@ class User {
     }
 
 
+    static async verifyCredentials(email, password) {
+        try {
+            const user = await UserModel.findOne({ email });
+
+            if (!user) {
+                throw new Error('Correo electrónico o contraseña incorrectos');
+            }
+
+            if (user.password !== password) {
+                throw new Error('Correo electrónico o contraseña incorrectos');
+            }
+
+            return {
+                _id: user._id,
+                type: user.type
+            };
+        } catch (error) {
+            console.error('Error al verificar las credenciales:', error);
+            throw new Error(error.message || 'Error al verificar las credenciales', error.statusCode || 401);
+        }
+    }
+
+
+
 }
 
 module.exports = User;

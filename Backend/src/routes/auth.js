@@ -12,5 +12,14 @@ router.post('/create', async (req, res, next) => {
     }
 });
 
+router.post('/login', async (req, res, next) => {
+    try {
+        const { email, password } = req.body;
+        const user = await User.verifyCredentials(email, password);
+        res.json(user);
+    } catch (error) {
+        next(error);
+    }
+});
 
 module.exports = router;
