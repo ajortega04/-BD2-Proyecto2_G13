@@ -92,6 +92,15 @@ class BookController {
             next(error);
         }
     }
+
+        static async getBooksByAuthor(authorName) {
+            try {
+                const books = await Book.find({ autor: authorName });
+                return books;
+            } catch (error) {
+                throw error;
+            }
+        }
 }
 
 module.exports = BookController;

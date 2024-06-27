@@ -95,6 +95,15 @@ router.post('/update', upload.single('imagen'), async (req, res, next) => {
     }
 });
 
+router.get('/by-author/:authorName', async (req, res, next) => {
+    try {
+        const { authorName } = req.params;
+        const books = await BookController.getBooksByAuthor(authorName);
+        res.json(books);
+    } catch (err) {
+        next(err);
+    }
+});
 
 // Ruta para eliminar un libro por ID
 router.delete('/:id', BookController.deleteBook);
