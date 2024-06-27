@@ -14,7 +14,8 @@ function BookCard({
     disponibilidad,
     puntuacion_promedio,
     onEdit,
-    onDelete
+    onDelete,
+    onAddToCart
 }) {
     const [viewBook, setViewBook] = useState(false);
 
@@ -52,6 +53,17 @@ function BookCard({
                     </button>
                     <button className="bg-gray-300 hover:bg-gray-400 rounded-md px-3 py-1 shadow-md p-1" onClick={onEdit}>
                         Editar
+                    </button>
+                    <button
+                        className="bg-red-700 hover:bg-red-800 rounded-full p-2 shadow-md flex items-center justify-center ml-2"
+                        onClick={onAddToCart}
+                        aria-label="Agregar al carrito"
+                    >
+                        <img
+                            src="../../public/carrito-de-compras.png" 
+                            alt="Carrito de compras"
+                            className="w-5 h-5"
+                        />
                     </button>
                 </div>
             </div>

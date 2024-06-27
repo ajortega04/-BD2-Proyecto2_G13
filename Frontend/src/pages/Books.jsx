@@ -326,6 +326,40 @@ function Books() {
         }
     };
 
+    const handleAddToCart = async (bookId) => {
+        try {
+            const response = await fetch(`http://localhost:3000/books/${bookId}`);
+            if (!response.ok) {
+                throw new Error('Error al obtener el libro para agregar al carrito');
+            }
+            const bookToAdd = await response.json();
+    
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+            const existingItem = cart.find(item => item.id === bookToAdd._id);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({
+                    id: bookToAdd._id,
+                    title: bookToAdd.titulo,
+                    description: bookToAdd.descripcion,
+                    price: bookToAdd.precio,
+                    quantity: 1,
+                    image: bookToAdd.imagenURL
+                });
+            }
+    
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            console.log(`Se agregó "${bookToAdd.titulo}" al carrito.`);
+    
+        } catch (error) {
+            console.error('Error al agregar el libro al carrito:', error);
+        }
+    };
+    
+
     const handleDeleteBook = async (bookId) => {
         // Implementa la lógica para eliminar un libro
         try {
@@ -391,6 +425,7 @@ function Books() {
                         puntuacion_promedio={book.puntuacion_promedio}
                         onEdit={() => handleEditBook(book._id)}
                         onDelete={() => handleDeleteBook(book._id)}
+                        onAddToCart={() => handleAddToCart(book._id)}
                     />
                 ))}
             </div>
