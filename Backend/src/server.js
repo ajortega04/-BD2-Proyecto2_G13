@@ -4,7 +4,9 @@ const authorsRoutes = require("./routes/authors");
 const authRoutes = require("./routes/auth");
 const booksRoutes = require("./routes/books");
 const cartRoutes = require("./routes/cart");
-const history = require("./routes/history")
+const history = require("./routes/history");
+const comment = require("./routes/comment")
+
 const mongoose = require("mongoose");
 
 const app = express();
@@ -17,6 +19,8 @@ app.use("/authors", authorsRoutes);
 app.use("/books", booksRoutes);
 app.use("/cart", cartRoutes);
 app.use("/history",history);
+app.use("/comment",comment);
+
 
 const PORT = 3000;
 

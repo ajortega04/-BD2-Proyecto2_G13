@@ -1,22 +1,20 @@
 const Book = require('../models/Book');
 
 class BookController {
-    // Crear un nuevo libro
-    static async createBook(req, res, next) {
+    // Controlador para crear un libro
+    static async createBook({
+        titulo,
+        autor,
+        descripcion,
+        genero,
+        fecha_publicacion,
+        disponibilidad,
+        cantidad_stock,
+        puntuacion_promedio,
+        precio,
+        imagenURL
+    }) {
         try {
-            const {
-                titulo,
-                autor,
-                descripcion,
-                genero,
-                fecha_publicacion,
-                disponibilidad,
-                cantidad_stock,
-                puntuacion_promedio,
-                precio,
-                imagenURL
-            } = req.body;
-
             const newBook = new Book({
                 titulo,
                 autor,
@@ -32,16 +30,15 @@ class BookController {
 
             // Intentar guardar el libro
             const savedBook = await newBook.save();
-            res.status(201).json(savedBook);
+            return savedBook;
         } catch (error) {
             // Verificar si el error es debido a un índice único duplicado
             if (error.code === 11000) {
-                return res.status(400).json({ message: 'Ya existe un libro con el mismo título, autor, género y fecha de publicación' });
+                throw new Error('Ya existe un libro con el mismo título, autor, género y fecha de publicación');
             }
-            next(error);
+            throw error;
         }
     }
-
     // Obtener todos los libros
     static async getAllBooks(req, res, next) {
         try {
@@ -65,46 +62,20 @@ class BookController {
             next(error);
         }
     }
-
     // Actualizar un libro por ID
-    static async updateBook(req, res, next) {
+    static async updateBook(id, updateFields) {
         try {
-            const { id } = req.params;
-            const {
-                titulo,
-                autor,
-                descripcion,
-                genero,
-                fecha_publicacion,
-                disponibilidad,
-                cantidad_stock,
-                puntuacion_promedio,
-                precio,
-                imagenURL
-            } = req.body;
-
-            const updateFields = {
-                titulo,
-                autor,
-                descripcion,
-                genero,
-                fecha_publicacion,
-                disponibilidad,
-                cantidad_stock,
-                puntuacion_promedio,
-                precio,
-                imagenURL // Aquí esperamos que imagenURL sea un texto con la URL de la imagen
-            };
-
+            // Realizar la actualización en la base de datos
             const updatedBook = await Book.findByIdAndUpdate(id, updateFields, { new: true });
 
+            // Verificar si el libro existe y enviar la respuesta
             if (!updatedBook) {
-                return res.status(404).json({ message: 'Libro no encontrado' });
+                throw new Error('Libro no encontrado > '+id);
             }
 
-            res.status(200).json(updatedBook);
+            return updatedBook;
         } catch (error) {
-            next(error);
+            throw error; // Propaga el error para que sea manejado por el middleware de error en Express
         }
     }
 
@@ -121,6 +92,15 @@ class BookController {
             next(error);
         }
     }
+
+        static async getBooksByAuthor(authorName) {
+            try {
+                const books = await Book.find({ autor: authorName });
+                return books;
+            } catch (error) {
+                throw error;
+            }
+        }
 }
 
 module.exports = BookController;

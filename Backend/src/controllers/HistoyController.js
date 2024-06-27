@@ -115,7 +115,7 @@ const HistoryController = {
             await cart.save();
             res.status(200).json({ message: 'Cart status updated successfully', cart });
         } catch (error) {
-            
+            res.status(500).json({ message: 'Error al obtener los Cambio de Status', error: error.message });
         }
     }
 };

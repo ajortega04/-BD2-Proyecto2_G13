@@ -37,6 +37,31 @@ class Author {
             throw new Error('Error al eliminar el usuario');
         }
     }
+
+    static async getById(id) {
+        try {
+            return await AuthorModel.findById(id);
+        } catch (error) {
+            console.error('Error al obtener el autor:', error);
+            throw new Error('Error al obtener el autor');
+        }
+    }
+
+    static async update(id, name, biography, picture) {
+        try {
+            const updatedAuthor = await AuthorModel.findByIdAndUpdate(
+                id,
+                { name, biography, picture },
+                { new: true }
+            );
+            return updatedAuthor;
+        } catch (error) {
+            console.error('Error al actualizar el autor:', error);
+            throw new Error('Error al actualizar el autor');
+        }
+    }
+    
+    
 }
 
 module.exports = Author

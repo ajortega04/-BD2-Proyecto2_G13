@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 function SignUp() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         type: 0,
         name: '',
@@ -10,19 +10,39 @@ function SignUp() {
         email: '',
         password: '',
         password2: '',
-        birthdate: ''
+        birthdate: '',
+        profilePicture: null,
+        paymentMethod: ''
     });
+    const [previewImage, setPreviewImage] = useState(null);
 
     const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
+        if (e.target.name === 'profilePicture') {
+            const file = e.target.files[0];
+            setFormData({
+                ...formData,
+                profilePicture: file
+            });
+            setPreviewImage(URL.createObjectURL(file));
+        } else if (e.target.name === 'paymentMethod') {
+            const value = e.target.value;
+            // Validar la longitud de la tarjeta de crédito (16 dígitos)
+            if (value.length <= 16) {
+                setFormData({
+                    ...formData,
+                    paymentMethod: value
+                });
+            }
+        } else {
+            setFormData({
+                ...formData,
+                [e.target.name]: e.target.value
+            });
+        }
     };
 
     async function handleSignUp(e) {
         e.preventDefault();
-
 
         // Verificar que las contraseñas coincidan
         if (formData.password !== formData.password2) {
@@ -30,17 +50,24 @@ function SignUp() {
             return;
         }
 
+        // Verificar que se haya ingresado un método de pago válido
+        if (formData.paymentMethod.length !== 16) {
+            alert("El método de pago debe tener 16 dígitos");
+            return;
+        }
+
         console.log(JSON.stringify(formData, null, 2));
 
         const { password2, ...dataToSend } = formData;
+        const formDataToSend = new FormData();
+        Object.keys(dataToSend).forEach(key => {
+            formDataToSend.append(key, dataToSend[key]);
+        });
 
-        try {
+         try {
             const response = await fetch('http://localhost:3000/users/create', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(dataToSend),
+                body: formDataToSend,
             });
 
             if (!response.ok) {
@@ -51,10 +78,10 @@ function SignUp() {
             localStorage.setItem('userId', result._id);
             localStorage.setItem('userType', result.type.toString());
             navigate("/home");
-        } catch (error) {
+         } catch (error) {
             console.error('Error al crear el usuario:', error);
             alert('Hubo un error al crear el usuario. Por favor, intenta de nuevo.');
-        }
+         }
     }
 
     return (
@@ -123,7 +150,7 @@ function SignUp() {
                             required
                         />
                     </div>
-                    <div>
+                    <div className="mb-5">
                         <label htmlFor="password2" className="text-sm font-bold">Confirma tu contraseña</label>
                         <input
                             type="password"
@@ -132,6 +159,32 @@ function SignUp() {
                             placeholder="*********"
                             onChange={handleChange}
                             value={formData.password2}
+                            required
+                        />
+                    </div>
+                    <div className="mb-5">
+                        <label htmlFor="profilePicture" className="text-sm font-bold pb-7">Foto de perfil</label>
+                        <input
+                            type="file"
+                            name="profilePicture"
+                            className="w-full p-2 text-sm border border-zinc-700 rounded-md mt-2"
+                            onChange={handleChange}
+                            accept="image/*"
+                        />
+                        {previewImage && (
+                            <img src={previewImage} alt="Preview" className="mt-2 max-w-full h-auto rounded-md" />
+                        )}
+                    </div>
+                    <div className="mb-5">
+                        <label htmlFor="paymentMethod" className="text-sm font-bold pb-7">Método de pago</label>
+                        <input
+                            type="text"
+                            name="paymentMethod"
+                            className="w-full p-2 text-sm border border-zinc-700 rounded-md mt-2"
+                            placeholder="Ingresa tu tarjeta de crédito (16 dígitos)"
+                            onChange={handleChange}
+                            value={formData.paymentMethod}
+                            maxLength={16}
                             required
                         />
                     </div>
