@@ -1,3 +1,62 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ModalStyles.css */
+
+.custom-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff; /* Fondo del modal */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 400px; /* Ancho máximo del modal */
+    width: 100%;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    text-align: center; /* Centrar el título */
+}
+
+.modal-message {
+    font-size: 1rem;
+    margin-bottom: 20px;
+    text-align: center; /* Centrar el mensaje */
+}
+
+.modal-button {
+    background-color: #000000;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: flex; /* Hacer el botón de ancho completo */
+    justify-content: center;
+    width: 40%;
+    margin-left: 30%;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 20px; /* Espacio superior */
+}
+
+.modal-button:hover {
+    background-color: #888888;
+}
+
+.error-modal {
+    background-color: #c4c4c4; /* Fondo del modal de error */
+}
+
+.modal-overlay {
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo gris claro del overlay */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
