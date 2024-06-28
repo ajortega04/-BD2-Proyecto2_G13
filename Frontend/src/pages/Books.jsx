@@ -20,6 +20,10 @@ function Books() {
         message: '',
         isError: false
     });
+    const [userType, setUserType] = useState(null);
+    
+    const [filteredBooks, setFilteredBooks] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const openModal = (title, message, isError = false) => {
         setModalContent({ title, message, isError });
@@ -77,6 +81,7 @@ function Books() {
             }
             const data = await response.json();
             setBooks(data); // Actualiza el estado con los libros obtenidos
+            setFilteredBooks(data);
             setLoading(false);
         } catch (error) {
             console.error('Error al obtener los libros:', error);
@@ -102,11 +107,25 @@ function Books() {
         }
     };
 
+    useEffect(() => {
+        const filtered = books.filter(book =>
+          book.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          book.autor.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setFilteredBooks(filtered);
+      }, [books, searchTerm]);
+      
+      const handleSearchChange = (value) => {
+        setSearchTerm(value);
+      };
+
 
     // Cargar libros al montar el componente
     useEffect(() => {
         fetchBooks();
         fetchAuthors();
+        const storedUserType = localStorage.getItem('userType');
+        setUserType(storedUserType);
     }, []);
 
     const handleInputChange = (event) => {
@@ -390,9 +409,11 @@ function Books() {
     if (loading) return <p>Cargando libros...</p>;
     if (error) return <p>Error al cargar libros: {error}</p>;
 
+
+    
     return (
         <Layout title={"Libros"}>
-            <InputSearch />
+            <InputSearch onSearch={handleSearchChange} />
             <Modal
                 isOpen={modalOpen}
                 onRequestClose={closeModal}
@@ -404,14 +425,15 @@ function Books() {
                 <p className="modal-message">{modalContent.message}</p>
                 <button className="modal-button" onClick={closeModal}>Cerrar</button>
             </Modal>
-
+            {userType !== '0' && (
             <div className={"flex justify-end mt-5"}>
                 <button onClick={() => setNewBookModSt(true)} className={"bg-indigo-500 hover:bg-indigo-400 text-white font-medium rounded-md px-7 py-0.5 shadow-md"}>
                     Agregar libro
                 </button>
             </div>
+            )}
             <div className={"grid grid-cols-3 2xl:grid-cols-4 mt-5 gap-x-3 gap-y-2"}>
-                {books.map((book) => (
+                {filteredBooks.map((book) => (
                     <BookCard
                         bookId={book._id}
                         title={book.titulo}
@@ -426,6 +448,7 @@ function Books() {
                         onEdit={() => handleEditBook(book._id)}
                         onDelete={() => handleDeleteBook(book._id)}
                         onAddToCart={() => handleAddToCart(book._id)}
+                        userType={userType}
                     />
                 ))}
             </div>
@@ -582,8 +605,8 @@ function Books() {
                     </div>
                 </form>
             </ModalContainer>
-
-
+            
+        
             <ModalContainer
                 state={editBookModSt}
                 changeState={setEditBookModSt}

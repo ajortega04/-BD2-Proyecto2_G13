@@ -16,7 +16,8 @@ function BookCard({
     puntuacion_promedio,
     onEdit,
     onDelete,
-    onAddToCart
+    onAddToCart,
+    userType
 }) {
     const [viewBook, setViewBook] = useState(false);
 
@@ -40,9 +41,11 @@ function BookCard({
 
             <div className="flex flex-col justify-between p-2 w-full">
                 <div className="flex justify-end hover:text-red-500">
+                {userType !== '0' && (
                     <button onClick={onDelete}>
                         <FaRegTrashCan />
                     </button>
+                    )}
                 </div>
                 <div>
                     <p className="text-lg font-medium">{title}</p>
@@ -52,9 +55,11 @@ function BookCard({
                     <button className="bg-black text-white rounded-md px-3 py-1 shadow-md mr-2 p-1" onClick={handleViewBook}>
                         Ver
                     </button>
+                    {userType !== '0' && (
                     <button className="bg-gray-300 hover:bg-gray-400 rounded-md px-3 py-1 shadow-md p-1" onClick={onEdit}>
                         Editar
                     </button>
+                    )}
                     <button
                         className="bg-red-700 hover:bg-red-800 rounded-full p-2 shadow-md flex items-center justify-center ml-2"
                         onClick={onAddToCart}

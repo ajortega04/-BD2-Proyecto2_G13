@@ -34,21 +34,19 @@ router.delete('/delete-by-id/:id', async (req, res, next) => {
     }
 });
 
-
-
-// En el archivo de rutas de autores
-router.get('/details/:id', async (req, res, next) => {
+router.get('/get-by-id/:id', async (req, res, next) => {
     try {
         const author = await Author.getById(req.params.id);
         if (!author) {
-            return res.status(404).json({ message: 'Autor no encontrado' });
+            return res.status(404).json({ message: "Author not found" });
         }
-        const books = await Book.find({ autor: author.name });
-        res.json({ author, books });
+        res.json(author);
     } catch (err) {
         next(err);
     }
 });
+
+
 
 router.put('/update/:id', upload.single('picture'), async (req, res, next) => {
     try {
