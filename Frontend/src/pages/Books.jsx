@@ -14,6 +14,10 @@ function Books() {
     const [selectedImage, setSelectedImage] = useState(defaultImage);
     const [selectedImageEdit, setSelectedImageEdit] = useState(defaultImage);
     const [authors, setAuthors] = useState([]);
+    const [selectedGenre, setSelectedGenre] = useState('');
+    const [selectedRating, setSelectedRating] = useState('');
+    const [priceRange, setPriceRange] = useState([0, 100]);
+    const [searchQuery, setSearchQuery] = useState('');
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState({
         title: '',
@@ -21,7 +25,7 @@ function Books() {
         isError: false
     });
     const [userType, setUserType] = useState(null);
-    
+
     const [filteredBooks, setFilteredBooks] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -41,6 +45,19 @@ function Books() {
     const handleError = (message) => {
         openModal('Error!', message, true);
     };
+
+    const handleFilterChange = () => {
+        const lowerQuery = searchQuery.toLowerCase();
+        const filtered = books.filter(book => {
+            const matchesQuery = book.titulo.toLowerCase().includes(lowerQuery);
+            const matchesGenre = selectedGenre ? book.genero === selectedGenre : true;
+            const matchesRating = selectedRating ? book.puntuacion_promedio >= selectedRating : true;
+            const matchesPrice = book.precio >= priceRange[0] && book.precio <= priceRange[1];
+            return matchesQuery && matchesGenre && matchesRating && matchesPrice;
+        });
+        setFilteredBooks(filtered);
+    };
+
 
     const [formData, setFormData] = useState({
         autor: "",
@@ -107,26 +124,33 @@ function Books() {
         }
     };
 
-    useEffect(() => {
-        const filtered = books.filter(book =>
-          book.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          book.autor.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        setFilteredBooks(filtered);
-      }, [books, searchTerm]);
-      
-      const handleSearchChange = (value) => {
+
+    const handleSearchChange = (value) => {
         setSearchTerm(value);
-      };
+    };
 
 
-    // Cargar libros al montar el componente
+   
+
     useEffect(() => {
         fetchBooks();
         fetchAuthors();
         const storedUserType = localStorage.getItem('userType');
         setUserType(storedUserType);
     }, []);
+    
+    // Efecto para aplicar filtros y búsqueda al cambiar dependencias
+    useEffect(() => {
+        // Filtrar por término de búsqueda
+        const filteredBySearch = books.filter(book =>
+            book.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            book.autor.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    
+        // Aplicar filtros adicionales
+        setFilteredBooks(filteredBySearch);
+        handleFilterChange();
+    }, [searchTerm, selectedGenre, selectedRating, priceRange, books]);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -372,9 +396,11 @@ function Books() {
             localStorage.setItem('cart', JSON.stringify(cart));
 
             console.log(`Se agregó "${bookToAdd.titulo}" al carrito.`);
-    
+            handleSuccess('¡El libro se ha agregado al carrito correctamente!');
+
         } catch (error) {
             console.error('Error al agregar el libro al carrito:', error);
+            handleError('¡Error al agregar libro al carrito!');
         }
     };
 
@@ -410,10 +436,53 @@ function Books() {
     if (error) return <p>Error al cargar libros: {error}</p>;
 
 
-    
+
     return (
         <Layout title={"Libros"}>
             <InputSearch onSearch={handleSearchChange} />
+            <div className="flex gap-3 mb-5 mt-5">
+                <select onChange={(e) => setSelectedGenre(e.target.value)} value={selectedGenre} className="p-2 border border-gray-300 rounded">
+                    <option value="">Todos los géneros</option>
+                    <option value="Thriller">Thriller</option>
+                    <option value="Drama">Drama</option>
+                    <option value="Ciencia ficción">Ciencia ficción</option>
+                    <option value="Fantasía">Fantasía</option>
+                    <option value="Romance">Romance</option>
+                    <option value="Misterio">Misterio</option>
+                    <option value="Aventura">Aventura</option>
+                    <option value="Biografía">Biografía</option>
+                    <option value="Histórico">Histórico</option>
+                    <option value="Terror">Terror</option>
+                    <option value="Humor">Humor</option>
+                    <option value="Poesía">Poesía</option>
+                    <option value="Filosofía">Filosofía</option>
+                    <option value="Autoayuda">Autoayuda</option>
+                </select>
+
+                <input
+                    type="range"
+                    min="0"
+                    max="500"
+                    value={priceRange[1]}
+                    onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
+                    className="p-2 border border-gray-300 rounded"
+                />
+                <span>Precio hasta: ${priceRange[1]}</span>
+
+                <select onChange={(e) => setSelectedRating(e.target.value)} value={selectedRating} className="p-2 border border-gray-300 rounded">
+                    <option value="">Todas las puntuaciones</option>
+                    <option value="1">1 puntos</option>
+                    <option value="2">2 puntos</option>
+                    <option value="3">3 puntos</option>
+                    <option value="4">4 puntos</option>
+                    <option value="6">6 puntos</option>
+                    <option value="7">7 puntos</option>
+                    <option value="8">8 puntos</option>
+                    <option value="9">9 puntos</option>
+                    <option value="10">10 puntos</option>
+                </select>
+            </div>
+
             <Modal
                 isOpen={modalOpen}
                 onRequestClose={closeModal}
@@ -426,11 +495,11 @@ function Books() {
                 <button className="modal-button" onClick={closeModal}>Cerrar</button>
             </Modal>
             {userType !== '0' && (
-            <div className={"flex justify-end mt-5"}>
-                <button onClick={() => setNewBookModSt(true)} className={"bg-indigo-500 hover:bg-indigo-400 text-white font-medium rounded-md px-7 py-0.5 shadow-md"}>
-                    Agregar libro
-                </button>
-            </div>
+                <div className={"flex justify-end mt-5"}>
+                    <button onClick={() => setNewBookModSt(true)} className={"bg-indigo-500 hover:bg-indigo-400 text-white font-medium rounded-md px-7 py-0.5 shadow-md"}>
+                        Agregar libro
+                    </button>
+                </div>
             )}
             <div className={"grid grid-cols-3 2xl:grid-cols-4 mt-5 gap-x-3 gap-y-2"}>
                 {filteredBooks.map((book) => (
@@ -441,6 +510,7 @@ function Books() {
                         description={book.descripcion}
                         imageUrl={book.imagenURL}
                         precio={book.precio}
+                        genero={book.genero}
                         cantidad_stock={book.cantidad_stock}
                         fecha_publicacion={formatDate(book.fecha_publicacion)}
                         disponibilidad={book.disponibilidad}
@@ -605,8 +675,8 @@ function Books() {
                     </div>
                 </form>
             </ModalContainer>
-            
-        
+
+
             <ModalContainer
                 state={editBookModSt}
                 changeState={setEditBookModSt}

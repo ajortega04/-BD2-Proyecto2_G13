@@ -3,7 +3,7 @@ import { Toast } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const BookView = ({ book, onClose }) => {
-    const { bookId, titulo, autor, descripcion, imagenURL, precio, cantidad_stock, fecha_publicacion, disponibilidad, puntuacion_promedio } = book;
+    const { bookId, titulo, autor, descripcion, imagenURL, precio, genero, cantidad_stock, fecha_publicacion, disponibilidad, puntuacion_promedio } = book;
     const [comments, setComments] = useState([]);
     const [rating, setRating] = useState('');
     const [newcomment, setNewComment] = useState('')
@@ -134,6 +134,7 @@ const BookView = ({ book, onClose }) => {
                         </div>
                         <div className="col-span-1">
                             <p className="text-sm text-gray-600 mb-4"><span className="font-bold">Autor:</span> {autor}</p>
+                            <p className="text-sm text-gray-600 mb-4"><span className="font-bold">Genero:</span> {genero}</p>
                             <p className="text-sm text-gray-600 mb-4"><span className="font-bold">Descripción:</span> {descripcion}</p>
                             <p className="text-sm text-gray-600 mb-4"><span className="font-bold">Precio:</span> ${precio}</p>
                             <p className="text-sm text-gray-600 mb-4"><span className="font-bold">Stock:</span> {cantidad_stock}</p>
