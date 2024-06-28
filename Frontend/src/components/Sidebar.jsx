@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, } from "react-router-dom";
 import { AiFillHome } from "react-icons/ai";
 import { CiLogout } from "react-icons/ci";
 import { GrHistory } from "react-icons/gr";
@@ -7,12 +7,16 @@ import { TbReportAnalytics } from "react-icons/tb";
 
 function Sidebar () {
     const navigate = useNavigate();
+    
     const handleCloseSession = () => {
         localStorage.removeItem('userId');
         localStorage.removeItem('userType');
         navigate('/');
     }
-
+    
+    const userType = localStorage.getItem('userType');
+    
+      
     return (
         <div className="fixed h-screen text-white">
             <div className="hidden md:flex flex-col gap-y-2 bg-black h-full w-[300px] p-2">
@@ -41,19 +45,22 @@ function Sidebar () {
                             <p>Libros</p>
                         </div>
                     </Link>
+                    {userType !== '0' && (
                     <Link to={"/history"}>
                         <div className="flex items-center mt-1 hover:text-indigo-300 pl-3">
                             <GrHistory className="mr-8 ml-3"/>
                             <p>Historial</p>
                         </div>
                     </Link>
+                    )}
+                    {userType !== '0' && (
                     <Link to={"/reports"}>
                         <div className="flex items-center mt-1 hover:text-indigo-300 pl-3">
                             <TbReportAnalytics className="mr-8 ml-3"/>
                             <p>Reporte</p>
                         </div>
                     </Link>
-
+                    )}
                     <hr className="mt-3 mb-3 border-t-2 mx-auto w-4/5 border-zinc-950"/>
 
                     <Link to={"/profile"}>
