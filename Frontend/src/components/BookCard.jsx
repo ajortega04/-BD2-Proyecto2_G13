@@ -45,7 +45,7 @@ function BookCard({
                     <button onClick={onDelete}>
                         <FaRegTrashCan />
                     </button>
-                    )}
+                    )}  
                 </div>
                 <div>
                     <p className="text-lg font-medium">{title}</p>
